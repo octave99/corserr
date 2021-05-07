@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<script>
+			function fetchUrl(url){
+				fetch(url).then((res) => {
+					res.json().then(function (data) {
+						console.log(data.data);
+					});
+					return res;
+				}).then(() => { }).catch((e) => {
+					console.log(e);
+				});
+			}
+			function workingCall(){
+				fetchUrl("http://localhost:8000/yes")
+			}
+			function notWorkingCall() {
+					fetchUrl("http://localhost:8000/no")
+			}
+		</script>
+	</head>
+<title>
+	Testing Page
+</title>
+<body>
+	<p>Launch the python server with: </p>
+	<p>python2.7 -m SimpleHTTPServer 3001</p>
+	<p>Access the page from the browser: http://localhost:3001/</p>
+	<p>Press below button to call working and not working API</p>
+	<button onclick="workingCall()">Working</button>
+	<button onclick="notWorkingCall()">Not Working</button>
+
+</body>
+</html>
