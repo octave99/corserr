@@ -47,9 +47,9 @@ async fn main() -> Result<()> {
     env_logger::init();
 
     let routes = routes()
-        .with(warp::log("cors test"))
-        .with(cors())
-        .recover(handle_rejection);
+    .recover(handle_rejection)
+    .with(warp::log("cors test"))
+    .with(cors());
 
     warp::serve(routes).run(([127, 0, 0, 1], 8000)).await;
 

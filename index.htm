@@ -8,11 +8,10 @@
 				fetch(url, {
 					headers: { "Content-type": "application/json; charset=UTF-8" }
 				}).then((res) => {
-					res.json().then(function (data) {
-						console.log(data.data);
-					});
-					return res;
-				}).then(() => { }).catch((e) => {
+					return res.json();
+				}).then((res) => { 
+					console.log(res)
+				}).catch((e) => {
 					console.log(e);
 				});
 			}
