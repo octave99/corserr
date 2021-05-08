@@ -40,6 +40,9 @@ pub async fn handle_rejection(err: Rejection) -> std::result::Result<impl Reply,
     if err.is_not_found() {
         code = StatusCode::NOT_FOUND;
         message = String::from("Not Found");
+    } else if let Some(e) = err.find::<warp::filters::body::BodyDeserializeError>() {
+        code = StatusCode::BAD_REQUEST;
+        message = e.to_string();
     } else if let Some(e) = err.find::<Error>() {
         match e {
             Error::BadReq(e) => {
@@ -63,9 +66,6 @@ pub async fn handle_rejection(err: Rejection) -> std::result::Result<impl Reply,
                 message = e.to_string();
             }
         }
-    } else if let Some(e) = err.find::<warp::filters::body::BodyDeserializeError>() {
-        code = StatusCode::BAD_REQUEST;
-        message = e.to_string();
     } else if let Some(e) = err.find::<warp::reject::MethodNotAllowed>() {
         code = StatusCode::METHOD_NOT_ALLOWED;
         message = e.to_string();
@@ -80,7 +80,4 @@ pub async fn handle_rejection(err: Rejection) -> std::result::Result<impl Reply,
 }
 
 /// Type alias for Result
-pub type Result<T> = std::result::Result<T, Error>;
-
-// Type alias for WarpResult
-pub type WarpResult<T> = std::result::Result<T, warp::Rejection>;
+pub type Result<T> = std::result::Result<T, warp::Rejection>;

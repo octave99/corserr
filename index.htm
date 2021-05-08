@@ -5,7 +5,9 @@
 		<meta content="utf-8" http-equiv="encoding">
 		<script>
 			function fetchUrl(url){
-				fetch(url).then((res) => {
+				fetch(url, {
+					headers: { "Content-type": "application/json; charset=UTF-8" }
+				}).then((res) => {
 					res.json().then(function (data) {
 						console.log(data.data);
 					});

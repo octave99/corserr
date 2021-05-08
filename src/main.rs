@@ -10,7 +10,7 @@ mod response;
 pub use response::Response;
 
 mod error;
-pub use error::{handle_rejection, Error, Result, WarpResult};
+pub use error::{handle_rejection, Error, Result};
 
 mod handler;
 
@@ -29,8 +29,7 @@ fn cors() -> warp::cors::Cors {
         .build()
 }
 
-pub async fn routes(
-) -> Result<impl warp::Filter<Extract = (impl Reply,), Error = Rejection> + Clone> {
+pub fn routes() -> impl warp::Filter<Extract = (impl Reply,), Error = Rejection> + Clone {
     let working_path = warp::path("yes")
         .and(warp::get())
         .and(warp::path::end())
@@ -41,14 +40,13 @@ pub async fn routes(
         .and(warp::path::end())
         .and_then(handler::not_working);
 
-    Ok(working_path.or(not_working_path))
+    working_path.or(not_working_path)
 }
 #[tokio::main]
 async fn main() -> Result<()> {
     env_logger::init();
 
     let routes = routes()
-        .await?
         .with(warp::log("cors test"))
         .with(cors())
         .recover(handle_rejection);
